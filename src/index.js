@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/webhooks', async (req, res) => {
 	if (!req.headers['x-vercel-signature']) return res.sendStatus(401);
 	if (!(await verifySignature(res))) return res.sendStatus(403);
-
+	if (!req.body.type.startsWith('deployment.')) return res.sendStatus(418);
 	const payload = req.body.payload;
 
 	const embed = {
